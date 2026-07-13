@@ -5,6 +5,7 @@ import org.sawiq.anybind.bind.Modifier;
 import org.sawiq.anybind.bind.action.Action;
 import org.sawiq.anybind.client.ClientScreens;
 import org.sawiq.anybind.client.Rebuildable;
+import org.sawiq.anybind.client.ScrollCompat;
 import org.sawiq.anybind.client.gui.UiColors;
 import org.sawiq.anybind.config.BindConfig;
 import org.sawiq.anybind.gui.editor.BindEditorForm;
@@ -94,7 +95,7 @@ public class BindEditScreen extends Screen {
     }
 
     private void rebuildKeepingScroll() {
-        pendingScroll = editorList.scrollAmount();
+        pendingScroll = ScrollCompat.get(editorList);
         shouldRestoreScroll = true;
         rebuildWidgets();
     }
@@ -103,7 +104,7 @@ public class BindEditScreen extends Screen {
         if (!shouldRestoreScroll) {
             return;
         }
-        editorList.setScrollAmount(pendingScroll);
+        ScrollCompat.set(editorList, pendingScroll);
         pendingScroll = 0.0;
         shouldRestoreScroll = false;
     }

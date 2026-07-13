@@ -2,6 +2,7 @@ package org.sawiq.anybind.client.gui;
 
 import org.sawiq.anybind.bind.Bind;
 import org.sawiq.anybind.client.ClientScreens;
+import org.sawiq.anybind.client.DrawCompat;
 import org.sawiq.anybind.client.KeyCapture;
 import org.sawiq.anybind.client.Rebuildable;
 import org.sawiq.anybind.config.BindConfig;
@@ -78,7 +79,7 @@ public class AnyBindEntry extends KeyBindsList.Entry {
         int color = bind.isEnabled() ? UiColors.TEXT : UiColors.FADED;
         String prefix = bind.isEnabled() ? "" : "§o";
         int nameWidth = Math.max(20, keyButton.getX() - x - 8);
-        context.drawString(client.font,
+        DrawCompat.drawString(context, client.font,
                 Component.literal(prefix + client.font.plainSubstrByWidth(name, nameWidth)),
                 x, y + (entryHeight - 9) / 2, color);
 

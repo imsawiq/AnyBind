@@ -3,6 +3,7 @@ package org.sawiq.anybind.gui;
 import org.sawiq.anybind.bind.Bind;
 import org.sawiq.anybind.bind.Modifier;
 import org.sawiq.anybind.bind.action.RunCommandAction;
+import org.sawiq.anybind.client.DrawCompat;
 import org.sawiq.anybind.client.gui.UiColors;
 import org.sawiq.anybind.gui.editor.BindEditorRows;
 
@@ -95,7 +96,7 @@ final class BindEditorList extends ContainerObjectSelectionList<BindEditorList.F
         }
 
         final void drawLabel(GuiGraphics graphics, Component label, int x, int y) {
-            graphics.drawString(font, label, x, y, UiColors.TEXT);
+            DrawCompat.drawString(graphics, font, label, x, y, UiColors.TEXT);
         }
 
         @Override
@@ -263,7 +264,8 @@ final class BindEditorList extends ContainerObjectSelectionList<BindEditorList.F
             button.setWidth(formWidth);
             button.setPosition(formX, y + 17);
             button.render(graphics, mouseX, mouseY, tickDelta);
-            graphics.drawString(font, trimmed(Component.translatable(action.getShell().descriptionKey()), formWidth),
+            DrawCompat.drawString(graphics, font,
+                    trimmed(Component.translatable(action.getShell().descriptionKey()), formWidth),
                     formX, y + 40, UiColors.MUTED);
         }
     }
@@ -284,7 +286,8 @@ final class BindEditorList extends ContainerObjectSelectionList<BindEditorList.F
             int formWidth = formWidth(entryWidth);
             List<FormattedCharSequence> lines = font.split(text, formWidth);
             for (int lineIndex = 0; lineIndex < Math.min(3, lines.size()); lineIndex++) {
-                graphics.drawString(font, lines.get(lineIndex), formX, y + 4 + lineIndex * 10, UiColors.MUTED);
+                DrawCompat.drawString(
+                        graphics, font, lines.get(lineIndex), formX, y + 4 + lineIndex * 10, UiColors.MUTED);
             }
         }
     }

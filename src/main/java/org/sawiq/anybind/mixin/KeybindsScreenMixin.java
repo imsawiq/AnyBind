@@ -6,6 +6,7 @@ import org.sawiq.anybind.bind.Modifier;
 import org.sawiq.anybind.client.ClientScreens;
 import org.sawiq.anybind.client.KeyCapture;
 import org.sawiq.anybind.client.Rebuildable;
+import org.sawiq.anybind.client.ScrollCompat;
 import org.sawiq.anybind.config.BindConfig;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -28,14 +29,14 @@ public abstract class KeybindsScreenMixin extends Screen implements Rebuildable 
     public void anybind$rebuild() {
         GameOptionsScreenAccessor self = (GameOptionsScreenAccessor) this;
         KeyBindsList currentList = ((KeybindsScreenAccessor) this).anybind$getControlsList();
-        double scroll = currentList == null ? 0.0 : currentList.scrollAmount();
+        double scroll = ScrollCompat.get(currentList);
 
         KeyBindsScreen nextScreen = new KeyBindsScreen(self.anybind$getParent(), self.anybind$getGameOptions());
         ClientScreens.show(minecraft, nextScreen);
 
         KeyBindsList newList = ((KeybindsScreenAccessor) nextScreen).anybind$getControlsList();
         if (newList != null) {
-            newList.setScrollAmount(scroll);
+            ScrollCompat.set(newList, scroll);
         }
     }
 
