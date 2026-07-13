@@ -1,0 +1,6 @@
+plugins {
+    id 'net.fabricmc.fabric-loom' version "${loom_version}"
+    id 'maven-publish'
+}
+
+apply from: "../shared/26.x/build-shared.gradle"

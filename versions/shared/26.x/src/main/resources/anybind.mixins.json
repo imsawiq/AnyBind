@@ -1,0 +1,18 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "org.sawiq.anybind.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "ControlsListWidgetMixin",
+    "GameOptionsScreenAccessor",
+    "KeybindsScreenAccessor",
+    "KeybindsScreenMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+  }
+}

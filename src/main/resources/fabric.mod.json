@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "id": "anybind",
+  "version": "${version}",
+  "name": "AnyBind",
+  "description": "Create custom keybinds in the controls menu that can open URLs, files and apps, run scripts, or send chat and game commands.",
+  "authors": [
+    "sawiq_"
+  ],
+  "license": "GPL-3.0",
+  "icon": "assets/anybind/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "org.sawiq.anybind.client.AnybindClient"
+    ]
+  },
+  "mixins": [
+    "anybind.mixins.json"
+  ],
+  "accessWidener": "anybind.accesswidener",
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric-api": "*",
+    "minecraft": "${minecraft_dependency}",
+    "java": "${java_dependency}"
+  }
+}

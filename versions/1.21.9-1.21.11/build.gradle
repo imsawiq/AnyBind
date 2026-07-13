@@ -1,0 +1,101 @@
+plugins {
+    id 'fabric-loom' version '1.16.3'
+    id 'maven-publish'
+}
+
+version = project.mod_version
+group = project.maven_group
+
+base {
+    archivesName = project.archives_base_name
+}
+
+sourceSets {
+    main {
+        java.srcDir layout.buildDirectory.dir("generated/root-shared/java")
+        resources.srcDir "../../src/main/resources"
+    }
+}
+
+loom {
+    accessWidenerPath = file("../../src/main/resources/anybind.accesswidener")
+}
+
+
+repositories {
+}
+
+tasks.register("syncRootSharedJava", Sync) {
+    from("../../src/main/java") {
+        exclude "org/sawiq/anybind/client/ClientKeyState.java"
+        exclude "org/sawiq/anybind/client/gui/AddBindEntry.java"
+        exclude "org/sawiq/anybind/client/gui/AnyBindEntry.java"
+        exclude "org/sawiq/anybind/gui/BindEditorList.java"
+        exclude "org/sawiq/anybind/gui/BindEditScreen.java"
+        exclude "org/sawiq/anybind/mixin/ControlsListWidgetMixin.java"
+        exclude "org/sawiq/anybind/mixin/KeybindsScreenMixin.java"
+    }
+    into(layout.buildDirectory.dir("generated/root-shared/java"))
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings loom.officialMojangMappings()
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+}
+
+processResources {
+    inputs.property "version", project.version
+    inputs.property "minecraft_dependency", project.minecraft_dependency
+    inputs.property "java_dependency", project.java_dependency
+    inputs.property "loader_version", project.loader_version
+    filteringCharset "UTF-8"
+
+    filesMatching("fabric.mod.json") {
+        expand "version": project.version,
+                "minecraft_dependency": project.minecraft_dependency,
+                "java_dependency": project.java_dependency,
+                "loader_version": project.loader_version
+    }
+}
+
+def targetJavaVersion = 21
+tasks.withType(JavaCompile).configureEach {
+    dependsOn tasks.named("syncRootSharedJava")
+    it.options.encoding = "UTF-8"
+    if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
+        it.options.release.set(targetJavaVersion)
+    }
+}
+
+tasks.matching { it.name == "sourcesJar" }.configureEach {
+    dependsOn tasks.named("syncRootSharedJava")
+}
+
+java {
+    def javaVersion = JavaVersion.toVersion(targetJavaVersion)
+    if (JavaVersion.current() < javaVersion) {
+        toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
+    }
+    withSourcesJar()
+}
+
+jar {
+    from("../../LICENSE.txt") {
+        rename { "${it}_${project.archives_base_name}" }
+    }
+}
+
+publishing {
+    publications {
+        create("mavenJava", MavenPublication) {
+            artifactId = project.archives_base_name
+            from components.java
+        }
+    }
+
+    repositories {
+    }
+}
